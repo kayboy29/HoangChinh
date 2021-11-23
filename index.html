@@ -1,0 +1,222 @@
+<!doctype html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="Demonstrates the use of Google Cloud Database with a Firebase DB">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Giám Sát Điện Nước</title>
+        <!--Material Design Lite-->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.blue_grey-orange.min.css">
+        <script src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+        <link rel="stylesheet" href="main.css">
+        <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!--Connect to firebase-->
+        <script>
+            // Your web app's Firebase configuration
+            // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+            var firebaseConfig = {
+                apiKey: "AIzaSyC2K3h7dUg-lKuB6euuUtbkO-LMj9yZ6vY",
+                authDomain: "testdoan-464d3.firebaseapp.com",
+                databaseURL: "https://testdoan-464d3-default-rtdb.firebaseio.com",
+                projectId: "testdoan-464d3",
+                storageBucket: "testdoan-464d3.appspot.com",
+                messagingSenderId: "795165111358",
+                appId: "1:795165111358:web:7e56de59a16301d66acd6f",
+                measurementId: "G-9E3SB0J54Z"
+            };
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+        </script>
+    </head>
+    <body>
+        <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+            <!-- Màn hình splash ( mới vào màn hình log in) -->
+            <!--<section id="page-splash">
+                <h3 class="logo">Hệ Thống Giám Sát Điện Nước Sinh Hoạt</h3> <div>
+                    <button id="sign-in-button" class="mdl-button--raised mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">account_circle</i> ĐĂNG NHẬP BẰNG GOOGLE</button>
+                </div>
+            </section>-->
+            <!-- Phần tiêu đề chứa logo và menu -->
+            <header class="header mdl-layout__header mdl-color-text--white mdl-color--light-blue-700">
+                <!-- bắt đầu phần tiêu đề -->
+                <div class="mdl-layout__header-row titlebar">
+                    <h3 class="logo">Hệ Thống Giám Sát Điện Nước Sinh Hoạt</h3>
+                    <!-- nút log out -->
+                    <button id="sign-out-button" class="mdl-button--raised mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">account_circle</i> Đăng Xuất</button>
+                </div>
+                <div class="tab mdl-layout__header-row mdl-color--light-blue-600">
+                    <div class="mdl-tab">
+
+                        <div id="menu-recent" class="mdl-layout__tab mdl-button mdl-js-button mdl-js-ripple-effect">
+
+                            <i class="material-icons">new_releases</i> Admin
+                        </div>
+
+                        <div id="menu-my-posts" class="mdl-layout__tab mdl-button mdl-js-button mdl-js-ripple-effect">
+
+                            <i class="material-icons">home</i> Giám Sát
+                        </div>
+
+                        <div id="menu-my-top-posts" class="mdl-layout__tab mdl-button mdl-js-button mdl-js-ripple-effect">
+
+                            <i class="material-icons">trending_up</i> 3 Tháng
+                        </div>
+
+                        <button id="btn-hien-thi" class="mdl-layout__tab mdl-button mdl-js-button mdl-js-ripple-effect">
+
+                            <i class="material-icons">trending_up</i> Hiển thị
+                        </button>
+
+
+                        <!--nút add 1 -->
+                        <button class="mdl-button mdl-js-button mdl-button--fab mdl-color--amber-400 mdl-shadow--4dp mdl-js-ripple-effect" id="add">
+                            <i class="material-icons">mode_edit</i>
+                        </button>
+
+                    </div>
+                </div>
+                
+            </header>
+
+            <main class="mdl-layout__content mdl-color--grey-100">
+
+                <!-- Hiển thị nút thêm bài 1 -->
+                <section class="mdl-grid content" id="add-post" style="display:none">
+                    <div class="mdl-cell mdl-cell--12-col mdl-grid">
+
+                        <!-- Thẻ chứa các đầu vào để thêm một tin nhắn mới -->
+                        <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--6-col-desktop">
+                            <div class="mdl-card__title mdl-color--light-blue-600 mdl-color-text--white">
+                                <h2 class="mdl-card__title-text">Bài Đăng Mới</h2>
+                            </div>
+                            <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                                <!-- bắt đầu form đăng bài -->
+                                <form id="message-form" action="#">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input class="mdl-textfield__input" type="text" id="new-post-title">
+                                        <label class="mdl-textfield__label" for="new-post-title">Tiêu đề...</label>
+                                    </div>
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <textarea class="mdl-textfield__input" rows="3" id="new-post-message"></textarea>
+                                        <label class="mdl-textfield__label" for="new-post-message">Nội dung...</label>
+                                    </div>
+
+                                    <!-- nút đăng bài -->
+                                    <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                                        Đăng bài
+                                    </button>
+                                </form>
+                                <!-- kết thúc form đăng bài -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Hiển thị danh sách các bài viết gần đây -->
+                <section class="mdl-grid content" id="recent-posts-list" style="display:none">
+                    <div class="posts-container mdl-cell mdl-cell--12-col mdl-grid">
+                    </div>
+                </section>
+
+                <!-- Hiển thị danh sách bài viết của người dùng -->
+                <section class="mdl-grid content" id="user-posts-list" style="display:none">
+                    <div class="posts-container mdl-cell mdl-cell--12-col mdl-grid">
+                    </div>
+                </section>
+
+                <!-- Hiển thị danh sách các bài đăng hàng đầu của người dùng -->
+                <section class="mdl-grid content" id="top-user-posts-list" style="display:none">
+                    <div class="posts-container mdl-cell mdl-cell--12-col mdl-grid">
+                    </div>
+                </section>
+
+                <div class="chart-dien-nuoc" id="chart-dien-nuoc">       
+                    <div id="thingspeakDien">
+                            <iframe width="535" height="260" style="border: 1px solid #cccccc;"
+                                src="https://thingspeak.com/channels/1399967/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=L%C6%B0u+l%C6%B0%E1%BB%A3ng+%C4%91i%E1%BB%87n&type=line&xaxis=Th%E1%BB%9Di+gian&yaxis=L%C6%B0%E1%BB%A3ng+%C4%91i%E1%BB%87n"></iframe>
+                            <button id="ngatdien" type="button" class="btn btn-danger">Ngắt điện</button>
+                    </div>
+                    <div id="thingspeakNuoc"> 
+                            <iframe width="535" height="260" style="border: 1px solid #cccccc;"
+                                src="https://thingspeak.com/channels/1399967/charts/2?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=L%C6%B0u+l%C6%B0%E1%BB%A3ng+n%C6%B0%E1%BB%9Bc&type=line&xaxis=Th%E1%BB%9Di+gian&yaxis=L%C6%B0%E1%BB%A3ng+n%C6%B0%E1%BB%9Bc"></iframe>
+                        <button id="ngatnuoc" type="button" class="btn btn-danger">Ngắt nước</button>                   
+                    </div>
+                </div> 
+            </main>
+        </div>
+        <!--Lichngo on the mic: Cái chỗ này để show cái div ra khi click vào hiển thị, -->
+        <!--Vì mấy btn khác mình click vào nó ko ra gì nên ko đặt cái hide vào mấy event đó đc, nào bạn connect đc DB cần mình sp thì mình giúp sau-->
+        <!--Hiện tại click vào btn Hiển thị để show và click thêm lần nữa để giấu nó đi-->
+        <script>
+            document.getElementById('btn-hien-thi').onclick=function(){
+            // Remove any element-specific value, falling back to stylesheets
+                if (document.getElementById('chart-dien-nuoc').style.display !== "none") {
+                    document.getElementById('chart-dien-nuoc').style.display = "none";
+                } else {
+                    document.getElementById('chart-dien-nuoc').style.display = "block";
+                }
+            };
+        </script>
+
+        <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+        <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+        <script src="/__/firebase/7.16.0/firebase-app.js"></script>
+
+        <!-- Add Firebase products that you want to use -->
+        <script src="/__/firebase/7.16.0/firebase-auth.js"></script>
+
+        <script src="/__/firebase/7.16.0/firebase-database.js"></script>
+
+        <!-- Previously loaded Firebase SDKs -->
+        <!-- Initialize Firebase -->
+        <script src="/__/firebase/init.js"></script>
+
+
+        <script src="scripts/main.js">var database = firebase.database().ref('/IoT');
+  var b;
+  var c;
+
+
+
+  document.getElementById('ngatdien').onclick = function () {
+    if(b) {
+        b=0;
+        writeStatus('0');
+    }
+    else {
+        b=1
+        writeStatus('1');
+    }
+}
+var writeStatus = function(status) {
+    database.update(
+         {'/Stop':status}
+    )
+}
+
+
+
+
+
+
+document.getElementById('ngatnuoc').onclick = function () {
+  if(c) {
+      c=0;
+      writeStatus('0');
+  }
+  else {
+      c=1
+      writeStatus('1');
+  }
+}
+var writeStatus = function(status) {
+  database.update(
+       {'/Stop':status}
+  )
+}</script>
+
+    </body>
+</html>
