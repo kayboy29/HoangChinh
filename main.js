@@ -1,4 +1,57 @@
 'use strict';
+//dell hieu
+var firebaseConfig = {
+    apiKey: "AIzaSyC2K3h7dUg-lKuB6euuUtbkO-LMj9yZ6vY",
+    authDomain: "testdoan-464d3.firebaseapp.com",
+    databaseURL: "https://testdoan-464d3-default-rtdb.firebaseio.com",
+    projectId: "testdoan-464d3",
+    storageBucket: "testdoan-464d3.appspot.com",
+    messagingSenderId: "795165111358",
+    appId: "1:795165111358:web:7e56de59a16301d66acd6f",
+    measurementId: "G-9E3SB0J54Z"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+var ref = firebase.database().ref();
+
+ref.on("value", function (snapshot) {
+    // console.log(snapshot.val().DIEU_KHIEN_DIEN);
+    document.getElementById('statusDien').innerHTML = snapshot.val().DIEU_KHIEN_DIEN;
+    // console.log(snapshot.val().DIEU_KHIEN_NUOC);
+    document.getElementById('statusNuoc').innerHTML = snapshot.val().DIEU_KHIEN_NUOC;
+
+}, function (error) {
+    console.log("Error: " + error.code);
+});
+
+const Dien = document.getElementById('ngatdien');
+const Nuoc = document.getElementById('ngatnuoc');
+
+Dien.addEventListener('click', () => {
+
+    let valueeee = null;
+    ref.on("value", function (snapshot) {
+        valueeee = !snapshot.val().DIEU_KHIEN_DIEN;
+    })
+
+    var db = firebase.database();
+    db.ref("DIEU_KHIEN_DIEN").set(valueeee ? 1 : 0);
+
+
+})
+
+Nuoc.addEventListener('click', () => {
+
+    let valueeee = null;
+    ref.on("value", function (snapshot) {
+        valueeee = !snapshot.val().DIEU_KHIEN_NUOC;
+    })
+
+    var db = firebase.database();
+    db.ref("DIEU_KHIEN_NUOC").set(valueeee ? 1 : 0);
+
+})
 
 // Các phím tắt đến DOM Elements.
 var messageForm = document.getElementById('message-form'); 

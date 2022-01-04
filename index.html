@@ -17,18 +17,18 @@
         <script>
             // Your web app's Firebase configuration
             // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-            var firebaseConfig = {
-                apiKey: "AIzaSyC2K3h7dUg-lKuB6euuUtbkO-LMj9yZ6vY",
-                authDomain: "testdoan-464d3.firebaseapp.com",
-                databaseURL: "https://testdoan-464d3-default-rtdb.firebaseio.com",
-                projectId: "testdoan-464d3",
-                storageBucket: "testdoan-464d3.appspot.com",
-                messagingSenderId: "795165111358",
-                appId: "1:795165111358:web:7e56de59a16301d66acd6f",
-                measurementId: "G-9E3SB0J54Z"
-            };
-            // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
+            //var firebaseConfig = {
+            //    apiKey: "AIzaSyC2K3h7dUg-lKuB6euuUtbkO-LMj9yZ6vY",
+            //    authDomain: "testdoan-464d3.firebaseapp.com",
+            //    databaseURL: "https://testdoan-464d3-default-rtdb.firebaseio.com",
+            //    projectId: "testdoan-464d3",
+            //    storageBucket: "testdoan-464d3.appspot.com",
+            //    messagingSenderId: "795165111358",
+            //    appId: "1:795165111358:web:7e56de59a16301d66acd6f",
+            //    measurementId: "G-9E3SB0J54Z"
+            //};
+            //// Initialize Firebase
+            //firebase.initializeApp(firebaseConfig);
         </script>
     </head>
     <body>
@@ -135,16 +135,18 @@
 
                 <div class="chart-dien-nuoc" id="chart-dien-nuoc">       
                     <div id="thingspeakDien">
-                            <iframe width="535" height="260" style="border: 1px solid #cccccc;"
+                        <iframe width="535" height="260" style="border: 1px solid #cccccc;"
                                 src="https://thingspeak.com/channels/1399967/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=L%C6%B0u+l%C6%B0%E1%BB%A3ng+%C4%91i%E1%BB%87n&type=line&xaxis=Th%E1%BB%9Di+gian&yaxis=L%C6%B0%E1%BB%A3ng+%C4%91i%E1%BB%87n"></iframe>
-                            <button id="ngatdien" type="button" class="btn btn-danger">Ngắt điện</button>
+                        <button id="ngatdien" type="button" class="btn btn-danger">Ngắt điện</button>
+                        <div id="statusDien" class="col-4 text-center fs-1"></div>
                     </div>
                     <div id="thingspeakNuoc"> 
                             <iframe width="535" height="260" style="border: 1px solid #cccccc;"
                                 src="https://thingspeak.com/channels/1399967/charts/2?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=L%C6%B0u+l%C6%B0%E1%BB%A3ng+n%C6%B0%E1%BB%9Bc&type=line&xaxis=Th%E1%BB%9Di+gian&yaxis=L%C6%B0%E1%BB%A3ng+n%C6%B0%E1%BB%9Bc"></iframe>
-                        <button id="ngatnuoc" type="button" class="btn btn-danger">Ngắt nước</button>                   
+                        <button id="ngatnuoc" type="button" class="btn btn-danger">Ngắt nước</button>    
+                        <div id="statusNuoc" class="col-4 text-center fs-1"></div>
                     </div>
-                </div> 
+                </div>
             </main>
         </div>
         <!--Lichngo on the mic: Cái chỗ này để show cái div ra khi click vào hiển thị, -->
