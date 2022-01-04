@@ -161,6 +161,47 @@
                     document.getElementById('chart-dien-nuoc').style.display = "block";
                 }
             };
+
+
+            document.addEventListener("DOMContentLoaded", function (event) {
+                ref.on("value", function (snapshot) {
+                    // console.log(snapshot.val().DIEU_KHIEN_DIEN);
+                    document.getElementById('statusDien').innerHTML = snapshot.val().DIEU_KHIEN_DIEN;
+                    // console.log(snapshot.val().DIEU_KHIEN_NUOC);
+                    document.getElementById('statusNuoc').innerHTML = snapshot.val().DIEU_KHIEN_NUOC;
+
+                }, function (error) {
+                    console.log("Error: " + error.code);
+                });
+
+                var Dien = document.getElementById("ngatdien");
+                const Nuoc = document.getElementById('ngatnuoc');
+
+                Dien.addEventListener('click', () => {
+
+                    let valueeee = null;
+                    ref.on("value", function (snapshot) {
+                        valueeee = !snapshot.val().DIEU_KHIEN_DIEN;
+                    })
+
+                    var db = firebase.database();
+                    db.ref("DIEU_KHIEN_DIEN").set(valueeee ? 1 : 0);
+
+
+                })
+
+                Nuoc.addEventListener('click', () => {
+
+                    let valueeee = null;
+                    ref.on("value", function (snapshot) {
+                        valueeee = !snapshot.val().DIEU_KHIEN_NUOC;
+                    })
+
+                    var db = firebase.database();
+                    db.ref("DIEU_KHIEN_NUOC").set(valueeee ? 1 : 0);
+
+                })
+            });
         </script>
 
         <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
